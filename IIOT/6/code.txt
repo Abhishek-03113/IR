@@ -1,0 +1,40 @@
+// C++ code
+//
+int sensor = 0;
+
+void setup()
+{
+  pinMode(A0, INPUT);
+  pinMode(7, INPUT);
+  pinMode(8, OUTPUT);
+  Serial.begin(9600);
+}
+
+void loop()
+{
+  float t = analogRead(A2);
+  float volts = (5*t)/1023;
+  float temp_c = (volts-0.5)/0.01;
+  sensor = analogRead(A0);
+  
+  int state = digitalRead(7);
+  
+  if (state == HIGH) {
+    Serial.print("MOTION DETECTED");
+  } else {
+    Serial.print("NO MOTION DETECTED");
+  }
+  Serial.println();
+  
+  Serial.print("Temp (C)= ");
+  Serial.println(temp_c);
+  Serial.println();
+  if (sensor > 150) {
+    digitalWrite(8, HIGH);
+  } else {
+    digitalWrite(8, LOW);
+  }
+  Serial.print("Force = ");
+  Serial.println(sensor);
+  delay(1000); // Wait for 100 millisecond(s)
+}

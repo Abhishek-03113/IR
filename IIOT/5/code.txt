@@ -1,0 +1,59 @@
+#include <LiquidCrystal.h>
+
+int password = 1234;
+
+LiquidCrystal lcd = LiquidCrystal(A0, A1, A2, A3, A4, A5);
+
+void display(byte row, char text[])
+{
+  lcd.setCursor(0, row);
+  lcd.print(text);
+}
+
+void openDoor()
+{
+  lcd.clear();
+  display(0, "Door Opened.");
+}
+
+void incorrectPassword()
+{
+  lcd.clear();
+  display(0, "Wrong Password.");
+}
+
+void setup()
+{ 
+  Serial.begin(9600);
+  lcd.begin(16, 2);
+  pinMode(2, OUTPUT);
+  display(0, "INSERT THE PIN:");
+}
+
+void loop()
+{
+  Serial.println("Enter your pin: ");
+  while(Serial.available()==0)
+  {
+  }
+  
+  int userInput = Serial.parseInt();
+  
+  if (userInput==password)
+  {
+    openDoor();
+    delay(3000);
+    
+    setup();
+  }
+  
+  else
+  {
+    digitalWrite(2, HIGH);
+    incorrectPassword();
+    delay(1500);
+    digitalWrite(2, LOW);
+    setup();
+  }
+  
+}
